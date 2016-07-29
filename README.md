@@ -1,5 +1,5 @@
 # Histomorph
-Image editor built with [electron](https://electron.atom.io)
+Image editor built with [electron](electron.atom.io)
 ## Edit Images with Live CSS Preview
 ![GitHub Logo](/img/demo.gif)
 ## Run Histomorph
