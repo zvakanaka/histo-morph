@@ -26,6 +26,16 @@ function setFilters() {
   img.style.webkitFilter = updatedFilters
 }
 
+//open dialog
+
+var openButton = document.getElementById('buttonOpen')
+openButton.addEventListener("click", function() {
+  dialog.showOpenDialog({properties: ['openFile']}, function(openfile) {
+    let img = document.getElementById('imgToMorph')
+    img.src = openfile
+  })
+})
+
 //slider listeners
 var brightnessSlider = document.getElementById('sliderBrightness')
 brightnessSlider.addEventListener("change", function() {
@@ -51,14 +61,15 @@ saturateSlider.addEventListener("change", function() {
   console.log(`saturate(${satVal}%)`);
 })
 
+var saveButton = document.getElementById('buttonSave')
+saveButton.addEventListener("click", function() {
+  let img = document.getElementById('imgToMorph')
+  main.saveImage(filters, img.src, `${__dirname}/out.jpg`)
+})
+
 var saveAsButton = document.getElementById('buttonSaveAs')
 saveAsButton.addEventListener("click", function() {
   dialog.showSaveDialog({defaultPath: `${__dirname}/out.jpg`}, function(outfile) {
     main.saveImage(filters, `${__dirname}/img/milkyway.jpg`, outfile)
   })
-})
-
-var saveButton = document.getElementById('buttonSave')
-saveButton.addEventListener("click", function() {
-    main.saveImage(filters, `${__dirname}/img/milkyway.jpg`, `${__dirname}/out.jpg`)
 })
