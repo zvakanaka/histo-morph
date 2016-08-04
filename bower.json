@@ -1,0 +1,24 @@
+{
+  "name": "histo-morph",
+  "authors": [
+    "Adam Quinton <quintonish@gmail.com>"
+  ],
+  "description": "Electron Image Editor",
+  "main": "/",
+  "keywords": [
+    "image", "editor"
+  ],
+  "license": "MIT",
+  "homepage": "howtoterminal.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.6"
+  }
+}

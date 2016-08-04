@@ -4,7 +4,7 @@ const main = remote.require('./main.js')
 
 const {dialog} = require('electron').remote
 
-var filters = {
+const defaultFilters = {
   blur: 0,
   brightness: 100,
   contrast: 100,
@@ -15,6 +15,7 @@ var filters = {
   saturation: 100,
   sepia: 0
 }
+var filters = defaultFilters
 
 function getFilters(img) {
   console.log(img.style.webkitFilter);
@@ -61,6 +62,38 @@ saturateSlider.addEventListener("change", function() {
   console.log(`saturate(${satVal}%)`);
 })
 
+var blurSlider = document.getElementById('sliderBlur')
+blurSlider.addEventListener("change", function() {
+  let blur = blurSlider.value;
+  filters.blur = Number(blur)
+  setFilters()
+  console.log(`blur(${blur}px)`);
+})
+
+var grayscaleSlider = document.getElementById('sliderGrayscale')
+grayscaleSlider.addEventListener("change", function() {
+  let grayscale = grayscaleSlider.value;
+  filters.grayscale = Number(grayscale)
+  setFilters()
+  console.log(`grayscale(${grayscale}%)`);
+})
+
+var opacitySlider = document.getElementById('sliderOpacity')
+opacitySlider.addEventListener("change", function() {
+  let opacity = opacitySlider.value;
+  filters.opacity = Number(opacity)
+  setFilters()
+  console.log(`opacity(${opacity}%)`);
+})
+
+var sepiaSlider = document.getElementById('sliderSepia')
+sepiaSlider.addEventListener("change", function() {
+  let sepia = sepiaSlider.value;
+  filters.sepia = Number(sepia)
+  setFilters()
+  console.log(`sepia(${sepia}%)`);
+})
+
 var saveButton = document.getElementById('buttonSave')
 saveButton.addEventListener("click", function() {
   let img = document.getElementById('imgToMorph')
@@ -70,6 +103,7 @@ saveButton.addEventListener("click", function() {
 var saveAsButton = document.getElementById('buttonSaveAs')
 saveAsButton.addEventListener("click", function() {
   dialog.showSaveDialog({defaultPath: `${__dirname}/out.jpg`}, function(outfile) {
-    main.saveImage(filters, `${__dirname}/img/milkyway.jpg`, outfile)
+    let img = document.getElementById('imgToMorph')
+    main.saveImage(filters, img.src, outfile)
   })
 })

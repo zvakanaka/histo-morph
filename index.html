@@ -3,23 +3,42 @@
   <head>
     <meta charset="utf-8">
     <title>Histomorph</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <script>window.$ = window.jQuery = require('./components/jquery/dist/jquery.min.js');</script>
+    <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <input id="buttonOpen" type="button" value="Open" />
+    <div class="container-fluid">
+      <img id="imgToMorph" width="100%" src="img/milkyway.jpg" />
 
-    <img id="imgToMorph" width="100%" src="img/milkyway.jpg" />
+      <label>Brightness</label>
+      <input id="sliderBrightness" type ="range" min ="0" max="500" step ="5" value ="100"/>
+      <label>Hue</label>
+      <input id="sliderHue" type ="range" min ="0" max="360" step ="5" value ="0"/>
+      <label>Saturate</label>
+      <input id="sliderSaturate" type ="range" min ="0" max="1000" step ="5" value ="100"/>
 
-    <label>Brightness</label>
-    <input id="sliderBrightness" type ="range" min ="0" max="500" step ="5" value ="100"/>
+      <button data-toggle="collapse" data-target="#extra-controls" class="btn btn-default">Show/Hide Controls</button>
+      <div id="extra-controls" class="collapse">
+        <label>Blur</label>
+        <input id="sliderBlur" type ="range" min ="0" max="30" step ="1" value ="0"/>
+        <label>Grayscale</label>
+        <input id="sliderGrayscale" type ="range" min ="0" max="100" step ="5" value ="0"/>
+        <label>Invert</label>
+        <input id="sliderInvert" type ="range" min ="0" max="100" step ="5" value ="0"/>
+        <label>Opacity</label>
+        <input id="sliderOpacity" type ="range" min ="0" max="100" step ="5" value ="100"/>
+        <label>Sepia</label>
+        <input id="sliderSepia" type ="range" min ="0" max="100" step ="5" value ="0"/>
+      </div>
 
-    <label>Hue</label>
-    <input id="sliderHue" type ="range" min ="0" max="360" step ="5" value ="0"/>
-
-    <label>Saturate</label>
-    <input id="sliderSaturate" type ="range" min ="0" max="1000" step ="5" value ="100"/>
-
-    <input id="buttonSave" type="button" value="Save" />
-    <input id="buttonSaveAs" type="button" value="Save As" />
-    <script>require('./index.js')</script>
+      <div class="btn-group" role="group">
+        <input id="buttonOpen" type="button" class="btn btn-default" value="Open" />
+        <input id="buttonSave" type="button" class="btn btn-default" value="Save" />
+        <input id="buttonSaveAs" type="button"class="btn btn-default"  value="Save As" />
+      </div>
+      <script>require('./index.js')</script>
+    </div>
   </body>
 </html>
