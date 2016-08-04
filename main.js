@@ -5,7 +5,7 @@ const fs = require('fs')
 const gm = require('gm');
 
 app.on('ready', () => {
-  let win = new BrowserWindow({width:800, height: 600})
+  let win = new BrowserWindow({width:800, height: 687})
   win.loadURL(`file://${__dirname}/index.html`)
   win.webContents.openDevTools()
 })

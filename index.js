@@ -2,6 +2,7 @@
 const remote = require('electron').remote
 const main = remote.require('./main.js')
 const {dialog} = require('electron').remote
+const clipboard = require('electron').clipboard
 
 const filterNames = ['brightness', 'hue', 'saturation',
                      'blur', 'grayscale', 'invert', 'opacity', 'sepia']
@@ -20,7 +21,7 @@ const defaultFilters = {
 var filters = JSON.parse(JSON.stringify(defaultFilters))//mutable to track slider states
 
 function getFilters(img) {
-  console.log(img.style.webkitFilter);
+  return `-webkit-filter: ${img.style.webkitFilter};`;
 }
 
 function setFilters() {
@@ -43,6 +44,12 @@ function resetFilters() {
 var resetFiltersButton = document.getElementById('button-reset-filters')
 resetFiltersButton.addEventListener("click", function() {
   resetFilters()
+})
+
+const copyCssButton = document.getElementById('button-copy-css')
+copyCssButton.addEventListener('click', function () {
+  let img = document.getElementById('img-to-morph')
+  clipboard.writeText(getFilters(img))
 })
 
 //*** slider listeners ***
