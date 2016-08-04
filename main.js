@@ -10,6 +10,7 @@ app.on('ready', () => {
   win.webContents.openDevTools()
 })
 
+//TODO: fix degrees to gm hue value, currently only accurate for 0(css)=100(gm)
 exports.saveImage = (filters, infile, outfile) => {
   gm(infile)
   .modulate(filters.brightness, filters.saturation, filters.hue%200+100)
