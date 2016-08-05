@@ -5,7 +5,8 @@ const {dialog} = require('electron').remote
 const clipboard = require('electron').clipboard
 
 const filterNames = ['brightness', 'hue', 'saturation',
-                     'blur', 'grayscale', 'invert', 'opacity', 'sepia']
+                     'blur', 'grayscale', 'invert',
+                     'opacity', 'sepia']
 const defaultFilters = {
   blur: 0,
   brightness: 100,
@@ -17,11 +18,15 @@ const defaultFilters = {
   saturation: 100,
   sepia: 0
 }
+
+function getDefaultFilters() {
+  return JSON.parse(JSON.stringify(defaultFilters))
+}
 //clone default filters by value
-var filters = JSON.parse(JSON.stringify(defaultFilters))//mutable to track slider states
+var filters = getDefaultFilters()
 
 function getFilters(img) {
-  return `-webkit-filter: ${img.style.webkitFilter};`;
+  return `${img.style.webkitFilter};`
 }
 
 function setFilters() {
@@ -49,11 +54,11 @@ resetFiltersButton.addEventListener("click", function() {
 const copyCssButton = document.getElementById('button-copy-css')
 copyCssButton.addEventListener('click', function () {
   let img = document.getElementById('img-to-morph')
-  clipboard.writeText(getFilters(img))
+  clipboard.writeText(`-webkit-filter: ${getFilters(img)}`)
 })
 
 //*** slider listeners ***
-//update values live:http://stackoverflow.com/a/37623959/4151489
+//update slider values live:http://stackoverflow.com/a/37623959/4151489
 function onRangeChange(r,f) {
   var n,c,m;
   r.addEventListener("input",function(e){n=1;c=e.target.value;if(c!=m)f(e);m=c;});
