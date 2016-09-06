@@ -4,9 +4,38 @@
     <meta charset="utf-8">
     <title>Histomorph</title>
     <!-- bootstrap -->
+    <script>
+      if (window && window.process && window.process.type) {
+        console.log('Electron detected');
+      } else {
+        // source: http://stackoverflow.com/a/950146/4151489
+        function require(url, callback)
+        {
+          var head = document.getElementsByTagName('head')[0];
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+
+          script.onreadystatechange = callback;
+          script.onload = callback
+
+          // Fire the loading
+          head.appendChild(script);
+        }
+      }
+      if (window && window.process && window.process.type) {
+        window.$ = window.jQuery = require('./components/jquery/dist/jquery.min.js');
+        require("./components/bootstrap/dist/js/bootstrap.min.js");
+      } else {
+        require("components/jquery/dist/jquery.min.js", function() {
+          console.log('Loaded jquery');
+          require("components/bootstrap/dist/js/bootstrap.min.js", function() {
+            console.log('Loaded bootstrap');
+          })
+        });
+      }
+    </script>
     <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
-    <script>window.$ = window.jQuery = require('./components/jquery/dist/jquery.min.js');</script>
-    <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
     <div class="container-fluid">
@@ -41,7 +70,9 @@
         <input id="button-save" type="button" class="btn btn-default" value="Save" />
         <input id="button-save-as" type="button"class="btn btn-default"  value="Save As" />
       </div>
-      <script>require('./index.js')</script>
+      <script>
+        require('./index.js')
+      </script>
     </div>
   </body>
 </html>
