@@ -1,0 +1,17 @@
+{
+  "name": "Histo-morph",
+  "short_name": "Histomorph",
+  "icons": [
+    {
+      "src": "/histo-morph/img/launcher.png",
+      "sizes": "36x36",
+      "type": "image/png",
+      "density": 0.75
+    }
+  ],
+  "theme_color": "#4286f4",
+  "background_color": "#4286f4",
+  "display": "standalone",
+  "start_url": "/histo-morph",
+  "orientation": "portrait"
+}

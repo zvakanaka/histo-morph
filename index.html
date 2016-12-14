@@ -2,22 +2,127 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="/manifest.json">
     <title>Histomorph</title>
     <!-- bootstrap -->
-    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
-    <script>window.$ = window.jQuery = require('./components/jquery/dist/jquery.min.js');</script>
-    <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+      if (window && window.process && window.process.type) {
+        console.log('Electron detected');
+      } else {
+        // source: http://stackoverflow.com/a/950146/4151489
+        function require(url, callback)
+        {
+          var head = document.getElementsByTagName('head')[0];
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = url;
+
+          script.onreadystatechange = callback;
+          script.onload = callback
+
+          // Fire the loading
+          head.appendChild(script);
+        }
+      }
+      if (window && window.process && window.process.type) {
+        window.$ = window.jQuery = require('./components/jquery/dist/jquery.min.js');
+        require("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
+      } else {
+        require("https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js", function() {
+          console.log('Loaded jquery');
+          require("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", function() {
+            console.log('Loaded bootstrap');
+            require("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.min.js", function() {
+              console.log('Loaded sliders');
+              require("./index.js", function() {
+                console.log('Loaded index');
+              })
+            })
+          })
+        });
+      }
+    </script>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/css/bootstrap-slider.min.css">
   </head>
   <body>
     <div class="container-fluid">
-      <img id="img-to-morph" width="100%" src="img/milkyway.jpg" />
+      <div class="row">
+        <script type="text/javascript">
+        function loadImage() {
+      var input, file, fr, img;
 
-      <label>Brightness</label>
-      <input id="slider-brightness" type ="range" min ="0" max="500" step ="5" value ="100"/>
-      <label>Hue</label>
-      <input id="slider-hue" type ="range" min ="0" max="360" step ="5" value ="0"/>
-      <label>Saturation</label>
-      <input id="slider-saturation" type ="range" min ="0" max="1000" step ="5" value ="100"/>
+      if (typeof window.FileReader !== 'function') {
+          write("The file API isn't supported on this browser yet.");
+          return;
+      }
+
+      input = document.getElementById('imgfile');
+      if (!input) {
+          write("Um, couldn't find the imgfile element.");
+      }
+      else if (!input.files) {
+          write("This browser doesn't seem to support the `files` property of file inputs.");
+      }
+      else if (!input.files[0]) {
+          write("Please select a file before clicking 'Load'");
+      }
+      else {
+          file = input.files[0];
+          console.log(file);
+          fr = new FileReader();
+          fr.onload = createImage;
+          fr.readAsDataURL(file);
+      }
+
+      function createImage() {
+          img = new Image();
+          img.onload = imageLoaded;
+          img.src = fr.result;
+          console.log(img.src);
+      }
+
+      function imageLoaded() {
+          var canvas = document.getElementById("img-to-morph")
+          canvas.width = img.width;
+          canvas.height = img.height;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img,0,0);
+          alert(canvas.toDataURL("image/png"));
+      }
+
+      function write(msg) {
+          var p = document.createElement('p');
+          p.innerHTML = msg;
+          document.body.appendChild(p);
+      }
+  }
+
+        </script>
+
+<form action='#' onsubmit="return false;">
+    <input type='file' id='imgfile' />
+    <input type='button' id='btnLoad' value='Load' onclick='loadImage();' />
+</form>
+    <canvas id="img-to-morph"></canvas>
+
+        <!-- <img class="img-responsive col"  src="img/milkyway.jpg"/> -->
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <label>Brightness</label>
+          <input id="slider-brightness" type="text" data-slider-min="0" data-slider-max="500" data-slider-step="5" data-slider-value="100"/>
+          <br/>
+          <label>Hue</label>
+          <input id="slider-hue" type="text" data-slider-min="0" data-slider-max="360" data-slider-step="5" data-slider-value="0"/>
+          <br/>
+          <label>Saturation</label>
+          <input id="slider-saturation" type ="range" data-slider-min ="0" data-slider-max="1000" data-slider-step ="5" data-slider-value ="100"/>
+          <br/>
+        </div>
+      </div>
 
       <button data-toggle="collapse" data-target="#extra-controls" class="btn btn-default">More/Less Controls</button>
       <div id="extra-controls" class="collapse">
@@ -41,7 +146,10 @@
         <input id="button-save" type="button" class="btn btn-default" value="Save" />
         <input id="button-save-as" type="button"class="btn btn-default"  value="Save As" />
       </div>
-      <script>require('./index.js')</script>
+      <script>
+        // require('./index.js')
+      </script>
+      <script src="app.js"></script>
     </div>
   </body>
 </html>

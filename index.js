@@ -1,8 +1,16 @@
+'use strict';
 //access to main.js functions for saving and what-not
-const remote = require('electron').remote
-const main = remote.require('./main.js')
-const {dialog} = require('electron').remote
-const clipboard = require('electron').clipboard
+var isElectron = window && window.process && window.process.type;
+
+if (isElectron) {
+  //console.log('Electron is ', window.process.type);
+  const remote = require('electron').remote
+  const main = remote.require('./main.js')
+  const dialog = require('electron').remote.dialog
+  const clipboard = require('electron').clipboard
+} else {
+  console.log('Load scripts here');
+}
 
 const filterNames = ['brightness', 'hue', 'saturation',
                      'blur', 'grayscale', 'invert',
@@ -58,21 +66,33 @@ copyCssButton.addEventListener('click', function () {
 })
 
 //*** slider listeners ***
-//update slider values live:http://stackoverflow.com/a/37623959/4151489
+// update slider values live. source:http://stackoverflow.com/a/37623959/4151489
 function onRangeChange(r,f) {
   var n,c,m;
   r.addEventListener("input",function(e){n=1;c=e.target.value;if(c!=m)f(e);m=c;});
   r.addEventListener("change",function(e){if(!n)f(e);});
 }
 
-//set up for sliders to update filter array
-filterNames.forEach(function(filterName) {
-  let filterSlider = document.getElementById('slider-'+filterName)
-  onRangeChange(filterSlider, function() {
-    let filterVal = filterSlider.value
-    filters[`${filterName}`] = Number(filterVal)
+function updateSlider(slider, filterName) {
+    let value = slider.getValue();
+
+    filters[`${filterName}`] = Number(value)
     setFilters()
-    console.log(`${filterName}(${filterVal})`);
+    console.log(`${filterName}(${value})`);
+};
+
+//setup for sliders to update filter array
+filterNames.forEach(function(filterName) {
+  let slider = new Slider('#slider-'+filterName, {
+    formatter: function(value) {
+      return 'Current value: ' + value;
+    }
+  });
+  slider.on('slide', function(){
+    updateSlider(slider, filterName);
+  });
+  slider.on('change', function(){
+    updateSlider(slider, filterName);
   });
 });
 //*** end slider listeners ***
@@ -80,10 +100,12 @@ filterNames.forEach(function(filterName) {
 //*** file dialogs ***
 var openButton = document.getElementById('button-open')
 openButton.addEventListener("click", function() {
-  dialog.showOpenDialog({properties: ['openFile']}, function(openfile) {
-    let img = document.getElementById('img-to-morph')
-    img.src = openfile
-  })
+  if (isElectron) {
+    dialog.showOpenDialog({properties: ['openFile']}, function(openfile) {
+      let img = document.getElementById('img-to-morph')
+      img.src = openfile
+    })
+  }
 })
 
 var saveButton = document.getElementById('button-save')

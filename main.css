@@ -1,0 +1,12 @@
+label {
+  margin-top: 25px;
+  margin-right: 25px;
+}
+input {
+  margin-top: 25px;
+}
+canvas {
+  background-color: blue;
+  width: 100%;
+  height: auto;
+}
